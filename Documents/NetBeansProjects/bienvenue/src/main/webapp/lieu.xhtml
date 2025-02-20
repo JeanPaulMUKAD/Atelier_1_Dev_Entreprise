@@ -13,6 +13,8 @@
         <h1 class="text-center">Ajouter un lieu</h1>
 
         <h:form class="card p-4 shadow">
+            <h:inputHidden value="#{lieuBean.indexModification}" />  <!-- Stocke l'index du lieu à modifier -->
+
             <div class="mb-3">
                 <label class="form-label">Entrez le nom :</label>
                 <h:inputText value="#{lieuBean.nom}" class="form-control" required="true"/>
@@ -33,7 +35,9 @@
                 <h:inputText value="#{lieuBean.longitude}" class="form-control" required="true"/>
             </div>
 
-            <h:commandButton value="Ajouter" action="#{lieuBean.ajouterLieu}" styleClass="btn btn-danger"/>
+            <h:commandButton value="Ajouter" action="#{lieuBean.ajouterLieu}" rendered="#{lieuBean.indexModification == -1}" styleClass="btn btn-success"/>
+            <h:commandButton value="Modifier" action="#{lieuBean.modifierLieu}" rendered="#{lieuBean.indexModification != -1}" styleClass="btn btn-warning"/>
+
         </h:form>
 
         <h2 class="mt-5 text-center">Tableau contenant la liste des lieux ajoutés</h2>
@@ -57,6 +61,14 @@
             <h:column>
                 <f:facet name="header">Longitude</f:facet>
                 #{lieu.longitude}
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">Actions</f:facet>
+                <h:form>
+                    <h:commandButton value="Modifier" action="#{lieuBean.preparerModification(lieu)}" styleClass="btn btn-warning btn-sm me-2"/>
+                    <h:commandButton value="Supprimer" action="#{lieuBean.supprimerLieu(lieu)}" styleClass="btn btn-danger btn-sm"/>
+                </h:form>
             </h:column>
         </h:dataTable>
 
