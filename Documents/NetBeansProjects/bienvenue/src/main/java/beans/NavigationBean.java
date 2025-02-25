@@ -15,7 +15,16 @@ public class NavigationBean implements Serializable {
     public void voirApropos(){
         try{
             FacesContext.getCurrentInstance().getExternalContext()
-                    .redirect("a_propos.xhtml");
+                    .redirect("pages/a_propos.xhtml");
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+    
+     public void voirLieu(){
+        try{
+            FacesContext.getCurrentInstance().getExternalContext()
+                    .redirect("pages/lieu.xhtml");
         }catch (IOException e){
             e.printStackTrace();
         }

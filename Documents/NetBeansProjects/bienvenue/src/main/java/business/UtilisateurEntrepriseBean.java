@@ -48,6 +48,15 @@ public class UtilisateurEntrepriseBean {
             return null; 
         }
     }
+        public Utilisateur authentifier(String email, String password) {
+            Utilisateur utilisateur = trouverUtilisateurParEmail(email);
+            if (utilisateur != null && BCrypt.checkpw(password, utilisateur.getPassword())) {
+                return utilisateur;
+            }
+            return null;
+        }
+
+
 
  
     @Transactional
