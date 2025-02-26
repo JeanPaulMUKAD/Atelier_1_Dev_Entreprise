@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package business;
 
 import jakarta.enterprise.context.RequestScoped;
@@ -11,13 +8,14 @@ import jakarta.servlet.http.HttpSession;
 
 /**
  *
- * @author SARTRE
+ * @author JEAN-PAUL MUKAD
  */
 @Named
 @RequestScoped
-public class SessionManager {
 
-    public void createSession(String key, String value) {
+public class SessionManager {
+    
+     public void createSession(String key, String value) {
         HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
         session.setAttribute(key, value);
     }
@@ -36,4 +34,5 @@ public class SessionManager {
             session.invalidate();
         }
     }
+    
 }

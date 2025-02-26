@@ -1,12 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/J2EE/EJB40/StatelessEjbClass.java to edit this template
- */
 package business;
 
 import entities.Lieu;
 import jakarta.ejb.Stateless;
-import jakarta.ejb.LocalBean;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
@@ -14,10 +9,10 @@ import java.util.List;
 
 /**
  *
- * @author SARTRE
+ * @author JEAN-PAUL MUKAD
  */
+
 @Stateless
-@LocalBean
 public class LieuEntrepriseBean {
 
     @PersistenceContext
@@ -25,20 +20,32 @@ public class LieuEntrepriseBean {
 
     @Transactional
     public void ajouterLieuEntreprise(String nom, String description, double latitude, double longitude) {
-        Lieu lieu = new Lieu(nom, description, latitude, longitude);
+        Lieu lieu = new Lieu(nom, description, longitude, latitude);
         em.persist(lieu);
     }
 
-    public List<Lieu> listerTousLesLieux() {
-        return em.createQuery("SELECT L FROM Lieu L", Lieu.class).getResultList();
+    @Transactional
+    public void modifierLieuEntreprise(int id, String nom, String description, double latitude, double longitude) {
+        Lieu lieu = em.find(Lieu.class, id);
+        if (lieu != null) {
+            lieu.setNom(nom);
+            lieu.setDescription(description);
+            lieu.setLatitude(latitude);
+            lieu.setLongitude(longitude);
+            em.merge(lieu);
+        }
     }
 
     @Transactional
-    public void supprimerLieu(int id) {
+    public void supprimerLieuEntreprise(int id) {
         Lieu lieu = em.find(Lieu.class, id);
         if (lieu != null) {
             em.remove(lieu);
         }
+    }
+
+    public List<Lieu> listerTousLesLieux() {
+        return em.createQuery("SELECT L FROM Lieu L", Lieu.class).getResultList();
     }
 
     public Lieu trouverLieuParId(int id) {

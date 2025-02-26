@@ -1,76 +1,94 @@
-<?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="jakarta.faces.html"
-      xmlns:f="jakarta.faces.core">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+<head>
+    <title>Gestion des Lieux</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"/>
+    <style>
+        .custom-container {
+            max-width: 800px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .table th, .table td {
+            vertical-align: middle;
+            text-align: center;
+        }
+    </style>
+</head>
+<body class="d-flex justify-content-center align-items-center vh-100 bg-light">
+    <div class="container custom-container text-center">
+        <h3 class="mb-4">Ajouter un Lieu</h3>
 
-    <head>
-        <title>Ajouter le lieu</title>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"/>
-    </head>
-    
-    <body class="container mt-5">
-        <h1 class="text-center">Ajouter un lieu</h1>
-
-        <h:form class="card p-4 shadow">
-            <h:inputHidden value="#{lieuBean.indexModification}" />  <!-- Stocke l'index du lieu à modifier -->
-
-            <div class="mb-3">
-                <label class="form-label">Entrez le nom :</label>
-                <h:inputText value="#{lieuBean.nom}" class="form-control" required="true"/>
+        <h:form>
+            <div class="mb-3 text-start">
+                <h:outputLabel for="nom" value="Nom :" class="form-label"/>
+                <h:inputText id="nom" value="#{lieuBean.nom}" class="form-control" required="true" />
             </div>
-
-            <div class="mb-3">
-                <label class="form-label">Entrez la description :</label>
-                <h:inputTextarea value="#{lieuBean.description}" class="form-control" required="true"/>
+            <div class="mb-3 text-start">
+                <h:outputLabel for="description" value="Description :" class="form-label"/>
+                <h:inputTextarea id="description" value="#{lieuBean.description}" class="form-control" required="true"/>
             </div>
-
-            <div class="mb-3">
-                <label class="form-label">Entrez la latitude :</label>
-                <h:inputText value="#{lieuBean.latitude}" class="form-control" required="true"/>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3 text-start">
+                        <h:outputLabel for="latitude" value="Latitude :" class="form-label"/>
+                        <h:inputText id="latitude" value="#{lieuBean.latitude}" class="form-control" required="true"/>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3 text-start">
+                        <h:outputLabel for="longitude" value="Longitude :" class="form-label"/>
+                        <h:inputText id="longitude" value="#{lieuBean.longitude}" class="form-control" required="true"/>
+                    </div>
+                </div>
             </div>
-
-            <div class="mb-3">
-                <label class="form-label">Entrez la longitude :</label>
-                <h:inputText value="#{lieuBean.longitude}" class="form-control" required="true"/>
-            </div>
-
-            <h:commandButton value="Ajouter" action="#{lieuBean.ajouterLieu}" rendered="#{lieuBean.indexModification == -1}" styleClass="btn btn-success"/>
-            <h:commandButton value="Modifier" action="#{lieuBean.modifierLieu}" rendered="#{lieuBean.indexModification != -1}" styleClass="btn btn-warning"/>
+            <h:commandButton value="Ajouter" action="#{lieuBean.enregistrerLieu()}" class="btn btn-success w-100"/> <br> </br>
+             <h:commandButton value="Retour" action="/index.xhtml" class="btn btn-secondary w-100"/>
 
         </h:form>
+       
 
-        <h2 class="mt-5 text-center">Tableau contenant la liste des lieux ajoutés</h2>
-
-        <h:dataTable value="#{lieuBean.lieux}" var="lieu" class="table table-bordered table-hover mt-3 shadow">
-            <h:column>
-                <f:facet name="header">Nom</f:facet>
-                #{lieu.nom}
-            </h:column>
-
-            <h:column>
-                <f:facet name="header">Description</f:facet>
-                #{lieu.description}
-            </h:column>
-
-            <h:column>
-                <f:facet name="header">Latitude</f:facet>
-                #{lieu.latitude}
-            </h:column>
-
-            <h:column>
-                <f:facet name="header">Longitude</f:facet>
-                #{lieu.longitude}
-            </h:column>
-
-            <h:column>
-                <f:facet name="header">Actions</f:facet>
-                <h:form>
-                    <h:commandButton value="Modifier" action="#{lieuBean.preparerModification(lieu)}" styleClass="btn btn-warning btn-sm me-2"/>
-                    <h:commandButton value="Supprimer" action="#{lieuBean.supprimerLieu(lieu)}" styleClass="btn btn-danger btn-sm"/>
-                </h:form>
-            </h:column>
-        </h:dataTable>
-
-    </body>
+        <h:panelGroup rendered="#{not empty lieuBean.listeLieux}">
+            <h3 class="mt-4">Liste des Lieux</h3>
+            <table class="table table-hover table-bordered">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Nom</th>
+                        <th>Description</th>
+                        <th>Latitude</th>
+                        <th>Longitude</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <ui:repeat value="#{lieuBean.listeLieux}" var="lieu">
+                        <tr>
+                            <td>#{lieu.id}</td>
+                            <td>#{lieu.nom}</td>
+                            <td>#{lieu.description}</td>
+                            <td>#{lieu.latitude}</td>
+                            <td>#{lieu.longitude}</td>
+                            <td>
+                                <h:form style="display:inline-block;">
+                                    <h:commandButton value="Modifier" action="#{lieuBean.preparerModification(lieu)}" class="btn btn-primary btn-sm"/>
+                                </h:form>
+                                <h:form style="display:inline-block;">
+                                    <h:commandButton value="Supprimer" action="#{lieuBean.supprimerLieu(lieu.id)}" class="btn btn-danger btn-sm"/>
+                                </h:form>
+                            </td>
+                        </tr>
+                    </ui:repeat>
+                </tbody>
+            </table>
+        </h:panelGroup>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 </html>

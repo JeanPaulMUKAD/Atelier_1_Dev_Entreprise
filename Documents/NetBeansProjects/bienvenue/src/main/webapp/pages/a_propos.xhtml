@@ -1,42 +1,75 @@
-<?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="jakarta.faces.html">
-    <h:head>
-         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"/>
-        <title>A propos</title>
-    </h:head>
-    <h:body class="d-flex justify-content-center align-items-center vh-100 bg-light">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<head>
+    <title>À Propos</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"/>
+
+    <style>
+        .custom-container {
+            max-width: 450px;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        }
+        .custom-container h4 {
+            font-weight: bold;
+            color: #333;
+        }
+        .form-control {
+            border-radius: 8px;
+        }
+        .btn {
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body class="d-flex justify-content-center align-items-center vh-100 bg-light">
+
+    <div class="container custom-container text-center">
+        <h4 class="mb-4"><i class="bi bi-person-circle"></i> À PROPOS</h4>
+
         <h:form>
-            <div class="container text-center p-4 shadow bg-white rounded" style="max-width: 500px;">
-                <h3>Bienvenue dans la page A propos</h3>
-
-                <!-- Affichage des informations utilisateur -->
-                <div class="mb-3">
-                    <label for="username" class="form-label">Nom d'utilisateur</label>
-                    <h:outputText id="username" value="#{userBean.utilisateur.username}" styleClass="form-control" readonly="true"/>
-                </div>
-                <div class="mb-3">
-                    <label for="email" class="form-label">Email</label>
-                    <h:outputText id="email" value="#{userBean.utilisateur.email}" styleClass="form-control" readonly="true"/>
-                </div>
-                
-                <!-- Champ pour modifier le mot de passe -->
-                <div class="mb-3">
-                    <label for="newPassword" class="form-label">Nouveau mot de passe</label>
-                    <h:inputSecret id="newPassword" value="#{userBean.newPassword}" styleClass="form-control" required="true"/>
-                </div>
-                <div class="mb-3">
-                    <label for="confirmPassword" class="form-label">Confirmer le mot de passe</label>
-                    <h:inputSecret id="confirmPassword" value="#{userBean.confirmPassword}" styleClass="form-control" required="true"/>
-                </div>
-
-                <!-- Bouton pour mettre à jour le profil -->
-                <h:commandButton value="Mettre à jour le profil" action="#{userBean.updateProfile()}" styleClass="btn btn-primary w-100"/>
-                
-                <!-- Bouton de déconnexion -->
-                <h:commandButton value="Déconnexion" action="#{userBean.logout()}" styleClass="btn btn-danger w-100 mt-3"/>
+            <div class="mb-3 text-start">
+                <h:outputLabel for="username" value="Nom :" class="form-label"/>
+                <h:inputText id="username" value="#{a_proposBean.username}" readonly="true" class="form-control"/>
             </div>
+
+            <div class="mb-3 text-start">
+                <h:outputLabel for="email" value="Email :" class="form-label"/>
+                <h:inputText id="email" value="#{a_proposBean.email}" readonly="true" class="form-control"/>
+            </div>
+
+            <div class="mb-3 text-start">
+                <h:outputLabel for="description" value="Description :" class="form-label"/>
+                <h:inputTextarea id="description" value="#{a_proposBean.description}" class="form-control" rows="2"/>
+            </div>
+
+            <div class="mb-3 text-start">
+                <h:outputLabel for="newPassword" value="Nouveau mot de passe :" class="form-label"/>
+                
+                <h:inputSecret id="newPassword" value="#{a_proposBean.newPassword}" class="form-control"/>
+
+                
+            </div>
+            <h:messages globalOnly="true" styleClass="messages" infoClass="message-info" errorClass="message-error" />
+            
+
+            <h:commandButton value="Modifier" action="#{a_proposBean.mettreAJourProfil}" class="btn btn-primary w-100 mb-2"/>
         </h:form>
-    </h:body>
+
+        <h:form>
+            <h:commandButton value="Déconnexion" action="#{welcomeBean.deconnecter}" immediate="true" class="btn btn-danger w-100"/>
+        </h:form>
+    </div>
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"/>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 </html>

@@ -1,99 +1,100 @@
 package beans;
 
-import jakarta.enterprise.context.SessionScoped;
+import business.LieuEntrepriseBean;
+import entities.Lieu;
+import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import jakarta.enterprise.context.SessionScoped;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
+
+/**
+ *
+ * @author JEAN-PAUL MUKAD
+ */
 
 @Named("lieuBean")
 @SessionScoped
-public class lieuBean implements Serializable {
+public class LieuBean implements Serializable {
+    private int idLieu = 0;
     private String nom;
     private String description;
-    private String latitude;
-    private String longitude;
-    private int indexModification = -1; // Indice du lieu en cours de modification (-1 si aucun)
-    private List<Lieu> lieux = new ArrayList<>();
+    private double latitude;
+    private double longitude;
 
-    public String getNom() { return nom; }
-    public void setNom(String nom) { this.nom = nom; }
+    @Inject
+    private LieuEntrepriseBean lieuEntrepriseBean;
 
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
 
-    public String getLatitude() { return latitude; }
-    public void setLatitude(String latitude) { this.latitude = latitude; }
-
-    public String getLongitude() { return longitude; }
-    public void setLongitude(String longitude) { this.longitude = longitude; }
-
-    public List<Lieu> getLieux() { return lieux; }
-
-    public int getIndexModification() { return indexModification; }
-    public void setIndexModification(int indexModification) { this.indexModification = indexModification; }
-
-    public static class Lieu {
-        private String nom;
-        private String description;
-        private String latitude;
-        private String longitude;
-
-        public Lieu(String nom, String description, String latitude, String longitude) {
-            this.nom = nom;
-            this.description = description;
-            this.latitude = latitude;
-            this.longitude = longitude;
-        }
-
-        public String getNom() { return nom; }
-        public String getDescription() { return description; }
-        public String getLatitude() { return latitude; }
-        public String getLongitude() { return longitude; }
-
-        public void setNom(String nom) { this.nom = nom; }
-        public void setDescription(String description) { this.description = description; }
-        public void setLatitude(String latitude) { this.latitude = latitude; }
-        public void setLongitude(String longitude) { this.longitude = longitude; }
+    public List<Lieu> getListeLieux() {
+        return lieuEntrepriseBean.listerTousLesLieux();
     }
 
-    public void ajouterLieu() {
-        lieux.add(new Lieu(nom, description, latitude, longitude));
+    public void enregistrerLieu() {
+        if (idLieu == 0) {
+            lieuEntrepriseBean.ajouterLieuEntreprise(nom, description, latitude, longitude);
+        } else {
+            lieuEntrepriseBean.modifierLieuEntreprise(idLieu, nom, description, latitude, longitude);
+        }
         resetForm();
     }
 
-    // Méthode pour préparer la modification d'un lieu
+    public void supprimerLieu(int id) {
+        lieuEntrepriseBean.supprimerLieuEntreprise(id);
+    }
+
+
     public void preparerModification(Lieu lieu) {
+        this.idLieu = lieu.getId();
         this.nom = lieu.getNom();
         this.description = lieu.getDescription();
         this.latitude = lieu.getLatitude();
         this.longitude = lieu.getLongitude();
-        this.indexModification = lieux.indexOf(lieu);
     }
 
-    // Méthode pour modifier un lieu existant
-    public void modifierLieu() {
-        if (indexModification >= 0 && indexModification < lieux.size()) {
-            Lieu lieu = lieux.get(indexModification);
-            lieu.setNom(nom);
-            lieu.setDescription(description);
-            lieu.setLatitude(latitude);
-            lieu.setLongitude(longitude);
-        }
-        resetForm();
-    }
 
-    // Méthode pour supprimer un lieu
-    public void supprimerLieu(Lieu lieu) {
-        lieux.remove(lieu);
-    }
-
-    // Réinitialiser le formulaire après une action
     private void resetForm() {
-        nom = "";
-        description = "";
-        latitude = "";
-        longitude = "";
-        indexModification = -1;
+        this.idLieu = 0;
+        this.nom = "";
+        this.description = "";
+        this.latitude = 0;
+        this.longitude = 0;
+    }
+
+
+    public int getIdLieu() {
+        return idLieu; 
+    }
+    public void setIdLieu(int idLieu) { 
+        this.idLieu = idLieu; 
+    }
+
+    public String getNom() {
+        return nom; 
+    }
+    public void setNom(String nom) {
+        this.nom = nom; 
+    }
+
+    
+    public String getDescription() {
+        return description; 
+    }
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public double getLatitude() {
+        return latitude; 
+    }
+    public void setLatitude(double latitude) { 
+        this.latitude = latitude; 
+    }
+
+    public double getLongitude() {
+        return longitude; 
+    }
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 }
