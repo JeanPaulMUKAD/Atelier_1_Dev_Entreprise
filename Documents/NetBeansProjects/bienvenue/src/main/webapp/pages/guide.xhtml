@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core">
+    <h:head>
+        <title>Choisissez un Lieu</title>
+        <!-- Bootstrap 5 -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"/>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+        <style>
+            body {
+                background-color: #f8f9fa;
+            }
+            .form-container, .visit-form-container {
+                max-width: 600px;
+                margin: 30px auto;
+                background: white;
+                padding: 30px;
+                border-radius: 10px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            }
+            .form-container h1, .visit-form-container h1 {
+                font-size: 24px;
+                margin-bottom: 20px;
+                text-align: center;
+            }
+            .btn-visit {
+                width: 100%;
+                padding: 10px;
+                font-size: 16px;
+            }
+            .weather-message {
+                font-weight: bold;
+                color: #007bff;
+                margin-top: 15px;
+                display: block;
+                text-align: center;
+            }
+        </style>
+    </h:head>
+
+    <h:body>
+        <div class="container">
+            <!-- Formulaire de sélection de lieu -->
+            <div class="form-container shadow-lg">
+                <h1>Sélectionner un Lieu</h1>
+
+                <h:form>
+                    <div class="mb-3">
+                        <label class="form-label">Lieu :</label>
+                        <h:selectOneMenu value="#{lieuBean.selectedLieu}" styleClass="form-select">
+                            <f:selectItems value="#{lieuBean.listeLieux}" var="lieu"
+                                           itemValue="#{lieu.id}" itemLabel="#{lieu.nom}"/>
+                            <f:ajax listener="#{lieuBean.updateWeatherMessage}" render="weather formulaireVisite"/>
+                        </h:selectOneMenu>
+                    </div>
+                </h:form>
+
+                <!-- Message météo -->
+                <h:outputText id="weather" value="#{lieuBean.weatherMessage}" styleClass="weather-message"/>
+
+                <br/>
+
+                <!-- Bouton "Visiter" -->
+                <h:form>
+                    <h:messages globalOnly="true" styleClass="alert alert-success mb-3 text-center" />
+                    <h:commandButton value="Visiter" action="#{formulaireVisiteBean.afficherFormulaireVisite}" 
+                                     styleClass="btn btn-primary btn-visit"/>
+                </h:form>
+            </div>
+
+            <!-- Formulaire de visite -->
+            <h:panelGroup rendered="#{formulaireVisiteBean.afficherFormulaireVisite}">
+                <div class="visit-form-container shadow-lg">
+                    <h1>Enregistrer une Visite</h1>
+
+                    <h:form>
+                        <div class="mb-3">
+                            <label for="date" class="form-label">Date de visite:</label>
+                            <h:inputText value="#{formulaireVisiteBean.dateVisite}" required="true" styleClass="form-control">
+
+                                <f:convertDateTime pattern="yyyy-MM-dd"/>
+                            </h:inputText>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="temps" class="form-label">Temps passé (min):</label>
+                            <h:inputText id="temps" value="#{formulaireVisiteBean.tempsPasse}" required="true"
+                                         styleClass="form-control"/>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="observations" class="form-label">Observations:</label>
+                            <h:inputText id="observations" value="#{formulaireVisiteBean.observations}" 
+                                         styleClass="form-control"/>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="depenses" class="form-label">Dépenses ($):</label>
+                            <h:inputText id="depenses" value="#{formulaireVisiteBean.depenses}" 
+                                         styleClass="form-control"/>
+                        </div>
+
+                        <h:commandButton value="Enregistrer Visite" action="#{formulaireVisiteBean.sauvegarderVisite}" 
+                                         styleClass="btn btn-success btn-visit"/>
+                    </h:form>
+                </div>
+            </h:panelGroup>
+
+            <!-- Tableau des visites -->
+            <div class="visit-form-container shadow-lg">
+                <h1>Historique des Visites</h1>
+                <h:dataTable value="#{formulaireVisiteBean.visitesUtilisateur}" var="visite" 
+                             styleClass="table table-striped table-bordered text-center">
+                    
+                    <h:column>
+                        <f:facet name="header">Date</f:facet>
+                        <h:outputText value="#{visite.dateVisite}">
+                            <f:convertDateTime pattern="yyyy-MM-dd HH:mm"/>
+                        </h:outputText>
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">Temps Passé (min)</f:facet>
+                        #{visite.tempsPasse}
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">Observations</f:facet>
+                        #{visite.observations}
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">Dépenses ($)</f:facet>
+                        #{visite.depenses}
+                    </h:column>
+                </h:dataTable>
+            </div> <!-- Fermeture de la balise div -->
+        </div>
+    </h:body>
+</html>

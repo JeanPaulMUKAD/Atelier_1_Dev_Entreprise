@@ -18,38 +18,15 @@ import java.io.IOException;
 @RequestScoped
 public class NavigationBean { 
     
-    public void VoirApropos(){
-        try {
-            FacesContext.getCurrentInstance().getExternalContext().redirect("pages/a_propos.xhtml");
-        
-        }catch(IOException e){
-            e.printStackTrace();
-        
-        }
-    
-    
+    public String VoirApropos(){
+        return "/pages/a_propos?faces-redirect=true";
     }
-    public void VoirVisiter(){
-        try {
-            FacesContext.getCurrentInstance().getExternalContext().redirect("home.xhtml");
-        
-        }catch(IOException e){
-            e.printStackTrace();
-        
-        }
     
-    
+    public String VoirVisiterLieux(){
+        return "/pages/guide?faces-redirect=true";
     }
-    public void VoirAjouter(){
-        try {
-            FacesContext.getCurrentInstance().getExternalContext().redirect("pages/lieu.xhtml");
-        
-        }catch(IOException e){
-            e.printStackTrace();
-        
-        }
     
-    
+    public String VoirAjouter(){
+        return "/pages/lieu?faces-redirect=true";
     }
-      
 }
